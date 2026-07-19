@@ -1,0 +1,395 @@
+// OpenEHR Bridge — Core data model
+// Design notes:
+// - UUIDs everywhere for safe distributed/idempotent inserts (workflow retries, browser automation jobs).
+// - AuditLog is append-only and references entities by loose (entityType, entityId) rather than FKs,
+//   so audit history survives even if the underlying record is later deleted.
+// - Soft-delete via `deletedAt` on patient-facing records to preserve audit/history integrity.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity & Access
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  ADMIN
+  DOCTOR
+  RECEPTIONIST
+  NURSE
+  AUDITOR
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         UserRole  @default(RECEPTIONIST)
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  doctorProfile Doctor?
+  auditLogs     AuditLog[]
+  conversations Conversation[]
+
+  @@index([organizationId])
+}
+
+// ---------------------------------------------------------------------------
+// Organization / Settings
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id            String   @id @default(uuid())
+  name          String
+  slug          String   @unique
+  timezone      String   @default("Asia/Kolkata")
+  address       String?
+  phone         String?
+  languages     String[] @default(["en"])
+  workingHours  Json?    // { mon: [{start, end}], tue: [...], ... }
+  holidays      Json?    // [{ date, label }]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  users         User[]
+  departments   Department[]
+  doctors       Doctor[]
+  patients      Patient[]
+  integrations  Integration[]
+
+  @@index([slug])
+}
+
+model Department {
+  id             String       @id @default(uuid())
+  name           String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  doctors        Doctor[]
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
+model Integration {
+  id             String       @id @default(uuid())
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  name           String        // e.g. "FHIR Server", "Legacy Portal (Browser Automation)"
+  mode           IntegrationMode
+  config         Json          // non-secret config; secrets referenced by name only
+  isEnabled      Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([organizationId])
+}
+
+enum IntegrationMode {
+  FHIR_REST
+  BROWSER_AUTOMATION
+}
+
+// ---------------------------------------------------------------------------
+// Clinical Directory
+// ---------------------------------------------------------------------------
+
+model Doctor {
+  id             String       @id @default(uuid())
+  user           User?        @relation(fields: [userId], references: [id])
+  userId         String?      @unique
+  name           String
+  specialty      String
+  department      Department? @relation(fields: [departmentId], references: [id])
+  departmentId    String?
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  organizationId  String
+  workingHours    Json?        // per-doctor override of org working hours
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  appointments    Appointment[]
+
+  @@index([organizationId])
+  @@index([departmentId])
+}
+
+// ---------------------------------------------------------------------------
+// Patients
+// ---------------------------------------------------------------------------
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  UNSPECIFIED
+}
+
+model Patient {
+  id                String    @id @default(uuid())
+  organization      Organization @relation(fields: [organizationId], references: [id])
+  organizationId    String
+  mrn               String    @unique // Medical Record Number, generated at intake
+  name              String
+  dob               DateTime?
+  gender            Gender    @default(UNSPECIFIED)
+  phone             String?
+  email             String?
+  address           String?
+  preferredLanguage String    @default("en")
+  emergencyContact  Json?     // { name, phone, relation }
+
+  // Identity verification (Smart Patient Intake)
+  aadhaarMasked     String?   // last 4 digits only, e.g. "XXXX-XXXX-1234"
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  verificationScore  Float?
+  verifiedAt         DateTime?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  appointments      Appointment[]
+  insurancePolicies Insurance[]
+  conversations     Conversation[]
+  fhirResources     FhirResource[]
+
+  @@index([organizationId])
+  @@index([name])
+  @@index([phone])
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+// ---------------------------------------------------------------------------
+// Insurance
+// ---------------------------------------------------------------------------
+
+enum InsuranceVerificationStatus {
+  NOT_CHECKED
+  PENDING
+  ACTIVE
+  INACTIVE
+  DENIED
+}
+
+model Insurance {
+  id                 String   @id @default(uuid())
+  patient            Patient  @relation(fields: [patientId], references: [id])
+  patientId          String
+  provider           String
+  policyNumberMasked String   // e.g. "XXXXXXXX1234"
+  groupNumber        String?
+  status             InsuranceVerificationStatus @default(NOT_CHECKED)
+  lastVerifiedAt     DateTime?
+  coverageDetails    Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+// ---------------------------------------------------------------------------
+// Appointments
+// ---------------------------------------------------------------------------
+
+enum AppointmentStatus {
+  REQUESTED
+  CONFIRMED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+model Appointment {
+  id             String   @id @default(uuid())
+  patient        Patient  @relation(fields: [patientId], references: [id])
+  patientId      String
+  doctor         Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId       String
+  startsAt       DateTime
+  endsAt         DateTime
+  status         AppointmentStatus @default(REQUESTED)
+  reason         String?
+  isUrgent       Boolean  @default(false)
+  integrationMode IntegrationMode?  // which path booked this: FHIR or browser automation
+  idempotencyKey String?  @unique   // prevents duplicate bookings from retried workflow steps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  cancelledAt    DateTime?
+  cancelReason   String?
+
+  workflows      AutomationJob[]
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([startsAt])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Automation / Workflow Engine
+// ---------------------------------------------------------------------------
+
+enum WorkflowType {
+  REGISTRATION
+  IDENTITY_VERIFICATION
+  APPOINTMENT_BOOKING
+  APPOINTMENT_RESCHEDULE
+  APPOINTMENT_CANCELLATION
+  INSURANCE_VERIFICATION
+  PATIENT_LOOKUP
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  RETRYING
+  DEAD_LETTER
+}
+
+model AutomationJob {
+  id             String       @id @default(uuid())
+  type           WorkflowType
+  status         JobStatus    @default(PENDING)
+  integrationMode IntegrationMode
+  appointment    Appointment? @relation(fields: [appointmentId], references: [id])
+  appointmentId  String?
+  input          Json
+  output         Json?
+  error          String?
+  attempt        Int          @default(0)
+  maxAttempts    Int          @default(3)
+  idempotencyKey String       @unique
+  correlationId  String
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  durationMs     Int?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  steps          WorkflowStep[]
+
+  @@index([status])
+  @@index([type])
+  @@index([correlationId])
+}
+
+model WorkflowStep {
+  id             String       @id @default(uuid())
+  job            AutomationJob @relation(fields: [jobId], references: [id])
+  jobId          String
+  name           String        // e.g. "login", "search_patient", "book_slot", "download_confirmation"
+  status         JobStatus     @default(PENDING)
+  attempt        Int           @default(0)
+  screenshotUrl  String?       // for browser-automation steps
+  logs           String?
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  durationMs     Int?
+  createdAt      DateTime      @default(now())
+
+  @@index([jobId])
+}
+
+// ---------------------------------------------------------------------------
+// AI Conversation Memory
+// ---------------------------------------------------------------------------
+
+model Conversation {
+  id          String   @id @default(uuid())
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  patient     Patient? @relation(fields: [patientId], references: [id])
+  patientId   String?
+  channel     String   @default("assistant") // "assistant" | "voice-intake"
+  language    String   @default("en")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  messages    ConversationMessage[]
+
+  @@index([userId])
+  @@index([patientId])
+}
+
+model ConversationMessage {
+  id             String       @id @default(uuid())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  role           String        // "user" | "assistant" | "tool" | "system"
+  content        String
+  toolName       String?
+  toolArgs       Json?
+  createdAt      DateTime      @default(now())
+
+  @@index([conversationId])
+}
+
+// ---------------------------------------------------------------------------
+// FHIR Adapter Storage (mock resources)
+// ---------------------------------------------------------------------------
+
+model FhirResource {
+  id           String   @id @default(uuid())
+  resourceType String   // Patient | Appointment | Practitioner | Encounter | Observation | Coverage | Organization | Condition | Medication | DiagnosticReport
+  fhirId       String   @unique
+  patient      Patient? @relation(fields: [patientId], references: [id])
+  patientId    String?
+  data         Json      // full FHIR resource JSON
+  version      Int       @default(1)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([resourceType])
+  @@index([patientId])
+}
+
+// ---------------------------------------------------------------------------
+// Audit Log (append-only)
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id             String   @id @default(uuid())
+  timestamp      DateTime @default(now())
+  actor          User?    @relation(fields: [actorId], references: [id])
+  actorId        String?
+  actorLabel     String   // denormalized, e.g. "AI Agent", "system", or user email — survives actor deletion
+  action         String   // e.g. "appointment.booked", "patient.updated"
+  entityType     String
+  entityId       String
+  before         Json?
+  after          Json?
+  durationMs     Int?
+  prompt         String?  // AI prompt, if action was AI-initiated
+  response       String?  // AI response, if action was AI-initiated
+  error          String?
+  correlationId  String
+  traceId        String
+
+  @@index([entityType, entityId])
+  @@index([correlationId])
+  @@index([timestamp])
+  @@index([action])
+}
