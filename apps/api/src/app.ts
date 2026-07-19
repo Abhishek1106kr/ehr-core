@@ -1,0 +1,65 @@
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import pinoHttp from "pino-http";
+import swaggerUi from "swagger-ui-express";
+import { env } from "./config/env";
+import { logger } from "./lib/logger";
+import { swaggerSpec } from "./lib/swagger";
+import { requestContext } from "./middleware/requestContext";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+
+import { authRouter } from "./routes/auth.routes";
+import { patientRouter } from "./routes/patient.routes";
+import { doctorRouter } from "./routes/doctor.routes";
+import { appointmentRouter } from "./routes/appointment.routes";
+import { insuranceRouter } from "./routes/insurance.routes";
+import { auditLogRouter } from "./routes/auditLog.routes";
+import { organizationRouter } from "./routes/organization.routes";
+import { automationJobRouter } from "./routes/automationJob.routes";
+import { dashboardRouter } from "./routes/dashboard.routes";
+
+export function createApp() {
+  const app = express();
+
+  app.disable("x-powered-by");
+  app.use(helmet());
+  app.use(
+    cors({
+      origin: env.WEB_ORIGIN,
+      credentials: true,
+    }),
+  );
+  app.use(express.json({ limit: "2mb" }));
+  app.use(cookieParser());
+  app.use(requestContext);
+  app.use(
+    pinoHttp({
+      logger,
+      genReqId: (req) => (req as express.Request).traceId,
+      customLogLevel: (_req, res) => (res.statusCode >= 500 ? "error" : "info"),
+    }),
+  );
+
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok", service: "openehr-bridge-api", timestamp: new Date().toISOString() });
+  });
+
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+  app.use("/api/v1/auth", authRouter);
+  app.use("/api/v1/patients", patientRouter);
+  app.use("/api/v1/doctors", doctorRouter);
+  app.use("/api/v1/appointments", appointmentRouter);
+  app.use("/api/v1/insurance", insuranceRouter);
+  app.use("/api/v1/audit-logs", auditLogRouter);
+  app.use("/api/v1/organizations", organizationRouter);
+  app.use("/api/v1/automation-jobs", automationJobRouter);
+  app.use("/api/v1/dashboard", dashboardRouter);
+
+  app.use(notFoundHandler);
+  app.use(errorHandler);
+
+  return app;
+}

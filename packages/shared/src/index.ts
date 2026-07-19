@@ -177,6 +177,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "appointments:read",
     "appointments:write",
     "insurance:read",
+    "monitoring:read",
   ],
   RECEPTIONIST: [
     "patients:read",
@@ -185,8 +186,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "appointments:write",
     "insurance:read",
     "insurance:write",
+    "monitoring:read",
   ],
-  NURSE: ["patients:read", "appointments:read", "insurance:read"],
+  NURSE: ["patients:read", "appointments:read", "insurance:read", "monitoring:read"],
   AUDITOR: ["audit:read", "monitoring:read"],
 };
 

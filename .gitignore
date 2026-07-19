@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+apps/web/.next/
+apps/web/out/
+
+# Build output
+apps/api/dist/
+packages/*/dist/
+
+# Env files
+.env
+.env.local
+.env.*.local
+apps/api/.env
+apps/web/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# Prisma
+apps/api/prisma/migrations/dev.db*
+
+# Testing
+coverage/
+
+# Playwright
+apps/web/playwright-report/
+apps/web/test-results/
