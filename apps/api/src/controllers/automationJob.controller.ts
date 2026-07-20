@@ -5,12 +5,13 @@ import { listAutomationJobs, getAutomationJob } from "../services/automationJob.
 
 export const listAutomationJobsHandler = asyncHandler(async (req: Request, res: Response) => {
   const pagination = paginationSchema.parse(req.query);
-  const { status, type } = req.query;
+  const { status, type, integrationMode } = req.query;
   res.json(
     await listAutomationJobs({
       ...pagination,
       status: status as string | undefined,
       type: type as string | undefined,
+      integrationMode: integrationMode as string | undefined,
     }),
   );
 });

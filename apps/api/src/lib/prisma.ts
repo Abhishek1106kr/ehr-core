@@ -4,7 +4,6 @@ import { env } from "../config/env";
 // Reuse a single client across hot-reloads in dev (tsx watch) to avoid
 // exhausting the Postgres connection pool.
 declare global {
-  // eslint-disable-next-line no-var
   var __prisma: PrismaClient | undefined;
 }
 

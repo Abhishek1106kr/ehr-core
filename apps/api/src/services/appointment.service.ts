@@ -135,7 +135,10 @@ export async function rescheduleAppointment(
   });
 }
 
-export async function cancelAppointment(id: string, input: z.infer<typeof cancelAppointmentSchema>) {
+export async function cancelAppointment(
+  id: string,
+  input: z.infer<typeof cancelAppointmentSchema>,
+) {
   const appointment = await getAppointment(id);
   if (appointment.status === "CANCELLED") return appointment; // idempotent no-op
 

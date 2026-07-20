@@ -1,0 +1,1 @@
+npx --no-install prettier --check . || (echo "Run 'npx prettier --write .' to fix formatting" && exit 1)

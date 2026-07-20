@@ -21,7 +21,10 @@ export async function getOrganization(id: string) {
   return org;
 }
 
-export async function updateOrganization(id: string, input: z.infer<typeof updateOrganizationSchema>) {
+export async function updateOrganization(
+  id: string,
+  input: z.infer<typeof updateOrganizationSchema>,
+) {
   await getOrganization(id);
   return prisma.organization.update({ where: { id }, data: input });
 }

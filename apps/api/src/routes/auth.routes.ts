@@ -11,7 +11,9 @@ const loginLimiter = rateLimit({
   limit: 10,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: { code: "RATE_LIMITED", message: "Too many login attempts. Try again later." } },
+  message: {
+    error: { code: "RATE_LIMITED", message: "Too many login attempts. Try again later." },
+  },
 });
 
 authRouter.post("/login", loginLimiter, loginHandler);

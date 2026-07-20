@@ -36,3 +36,6 @@ coverage/
 # Playwright
 apps/web/playwright-report/
 apps/web/test-results/
+
+# Browser-automation screenshots captured at runtime
+apps/api/storage/

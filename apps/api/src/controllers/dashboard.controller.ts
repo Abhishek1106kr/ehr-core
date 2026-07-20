@@ -16,23 +16,17 @@ export const getDashboardSummaryHandler = asyncHandler(async (req: Request, res:
 
   const doctorWhere = organizationId ? { organizationId } : {};
 
-  const [
-    todaysAppointments,
-    pendingInsurance,
-    recentAuditLogs,
-    jobCounts,
-    failedJobs,
-    doctorIds,
-  ] = await Promise.all([
-    prisma.appointment.count({
-      where: { startsAt: { gte: startOfDay, lte: endOfDay }, status: { not: "CANCELLED" } },
-    }),
-    prisma.insurance.count({ where: { status: { in: ["NOT_CHECKED", "PENDING"] } } }),
-    prisma.auditLog.findMany({ orderBy: { timestamp: "desc" }, take: 10 }),
-    prisma.automationJob.groupBy({ by: ["status"], _count: true }),
-    prisma.automationJob.count({ where: { status: "FAILED" } }),
-    prisma.doctor.findMany({ where: doctorWhere, select: { id: true } }),
-  ]);
+  const [todaysAppointments, pendingInsurance, recentAuditLogs, jobCounts, failedJobs, doctorIds] =
+    await Promise.all([
+      prisma.appointment.count({
+        where: { startsAt: { gte: startOfDay, lte: endOfDay }, status: { not: "CANCELLED" } },
+      }),
+      prisma.insurance.count({ where: { status: { in: ["NOT_CHECKED", "PENDING"] } } }),
+      prisma.auditLog.findMany({ orderBy: { timestamp: "desc" }, take: 10 }),
+      prisma.automationJob.groupBy({ by: ["status"], _count: true }),
+      prisma.automationJob.count({ where: { status: "FAILED" } }),
+      prisma.doctor.findMany({ where: doctorWhere, select: { id: true } }),
+    ]);
 
   const totalJobs = jobCounts.reduce((sum, g) => sum + g._count, 0);
   const successJobs = jobCounts.find((g) => g.status === "SUCCESS")?._count ?? 0;

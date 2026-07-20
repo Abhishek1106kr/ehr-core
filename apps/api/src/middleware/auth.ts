@@ -21,7 +21,9 @@ declare module "express-serve-static-core" {
 const AUTH_COOKIE = "openehr_session";
 
 export function signAuthToken(payload: AuthTokenPayload): string {
-  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+  return jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  });
 }
 
 export function authCookieOptions() {
@@ -62,9 +64,7 @@ export function requirePermission(permission: string) {
       return next(new UnauthorizedError());
     }
     if (!hasPermission(req.user.role, permission)) {
-      return next(
-        new ForbiddenError(`Role "${req.user.role}" lacks permission "${permission}"`),
-      );
+      return next(new ForbiddenError(`Role "${req.user.role}" lacks permission "${permission}"`));
     }
     next();
   };

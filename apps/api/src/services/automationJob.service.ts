@@ -5,12 +5,14 @@ import type { PaginationQuery } from "../lib/pagination";
 interface ListJobsFilter extends PaginationQuery {
   status?: string;
   type?: string;
+  integrationMode?: string;
 }
 
 export async function listAutomationJobs(filter: ListJobsFilter) {
   const where = {
     ...(filter.status && { status: filter.status as never }),
     ...(filter.type && { type: filter.type as never }),
+    ...(filter.integrationMode && { integrationMode: filter.integrationMode as never }),
   };
 
   const [items, total] = await Promise.all([

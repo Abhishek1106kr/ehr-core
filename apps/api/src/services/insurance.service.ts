@@ -40,7 +40,8 @@ export async function verifyInsurance(id: string) {
   const insurance = await getInsurance(id);
   await prisma.insurance.update({ where: { id }, data: { status: "PENDING" } });
 
-  const isActive = insurance.policyNumberMasked.charCodeAt(insurance.policyNumberMasked.length - 1) % 5 !== 0;
+  const isActive =
+    insurance.policyNumberMasked.charCodeAt(insurance.policyNumberMasked.length - 1) % 5 !== 0;
 
   return prisma.insurance.update({
     where: { id },

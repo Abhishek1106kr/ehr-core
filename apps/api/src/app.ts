@@ -19,6 +19,10 @@ import { auditLogRouter } from "./routes/auditLog.routes";
 import { organizationRouter } from "./routes/organization.routes";
 import { automationJobRouter } from "./routes/automationJob.routes";
 import { dashboardRouter } from "./routes/dashboard.routes";
+import { fhirRouter } from "./routes/fhir.routes";
+import { workflowRouter } from "./routes/workflow.routes";
+import { legacyPortalRouter } from "./legacyPortal/legacyPortal.routes";
+import path from "node:path";
 
 export function createApp() {
   const app = express();
@@ -32,6 +36,7 @@ export function createApp() {
     }),
   );
   app.use(express.json({ limit: "2mb" }));
+  app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(requestContext);
   app.use(
@@ -57,6 +62,14 @@ export function createApp() {
   app.use("/api/v1/organizations", organizationRouter);
   app.use("/api/v1/automation-jobs", automationJobRouter);
   app.use("/api/v1/dashboard", dashboardRouter);
+  app.use("/api/v1/fhir", fhirRouter);
+  app.use("/api/v1/workflows", workflowRouter);
+
+  // Simulated legacy hospital portal — driven by Playwright, not our auth.
+  app.use("/legacy-portal", legacyPortalRouter);
+
+  // Screenshots captured by the browser-automation engine.
+  app.use("/storage", express.static(path.join(__dirname, "..", "storage")));
 
   app.use(notFoundHandler);
   app.use(errorHandler);
