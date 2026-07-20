@@ -1,11 +1,10 @@
 import type { ApiError } from "@openehr-bridge/shared";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-
-/** Resolves an API-relative asset path (e.g. a captured screenshot) to a full URL. */
-export function apiAssetUrl(assetPath: string): string {
-  return `${API_URL}${assetPath}`;
-}
+/**
+ * The frontend makes requests to /api/v1/* (Next.js API routes).
+ * These routes proxy to the actual backend (NEXT_PUBLIC_API_URL).
+ */
+const API_BASE = "/api/v1";
 
 export class ApiRequestError extends Error {
   constructor(
@@ -32,7 +31,7 @@ interface RequestOptions {
  * storage) is the safer default here.
  */
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const url = new URL(`${API_URL}/api/v1${path}`);
+  const url = new URL(`${API_BASE}${path}`, window.location.origin);
   if (options.params) {
     for (const [key, value] of Object.entries(options.params)) {
       if (value !== undefined) url.searchParams.set(key, String(value));
@@ -51,7 +50,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     throw new ApiRequestError(
       503,
       "SERVICE_UNAVAILABLE",
-      `Unable to connect to API server at ${API_URL}. Please ensure the backend dev server is running (npm run dev).`,
+      `Unable to connect to API server. Please ensure the backend is running.`,
     );
   }
 
@@ -72,3 +71,9 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
   return payload as T;
 }
+
+/** Resolves an API-relative asset path (e.g. a captured screenshot) to a full URL. */
+export function apiAssetUrl(assetPath: string): string {
+  return `${API_BASE}${assetPath}`;
+}
+
