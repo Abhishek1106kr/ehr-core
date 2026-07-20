@@ -75,6 +75,7 @@ export async function verifyPatientConsent(
   });
 
   return activeConsents.some(
-    (consent) => consent.scopes.includes("*") || consent.scopes.includes(requiredScope),
+    (consent: { scopes: string[] }) =>
+      consent.scopes.includes("*") || consent.scopes.includes(requiredScope),
   );
 }

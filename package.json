@@ -11,6 +11,7 @@
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
+    "prebuild": "npm run db:generate --workspace=apps/api",
     "build": "npm --prefix packages/shared run build && npm --prefix apps/api run build && npm --prefix apps/web run build",
     "lint": "npm --prefix apps/api run lint && npm --prefix apps/web run lint",
     "db:migrate": "npm --prefix apps/api run db:migrate",

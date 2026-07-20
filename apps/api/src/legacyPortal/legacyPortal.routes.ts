@@ -1,6 +1,7 @@
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { randomUUID } from "crypto";
 import { prisma } from "../lib/prisma";
+import type { Doctor } from "@prisma/client";
 import { createAppointment } from "../services/appointment.service";
 import { legacyLayout } from "./layout";
 import { escapeHtml } from "./escapeHtml";
@@ -89,7 +90,7 @@ legacyPortalRouter.get("/search-results", requireLegacySession, async (req, res)
 
   const rows = patients
     .map(
-      (p) => `
+      (p: { id: string; mrn: string; name: string }) => `
       <tr>
         <td>${escapeHtml(p.mrn)}</td>
         <td>${escapeHtml(p.name)}</td>
@@ -97,7 +98,7 @@ legacyPortalRouter.get("/search-results", requireLegacySession, async (req, res)
           <form method="get" action="/legacy-portal/book" style="margin:0">
             <input type="hidden" name="patientId" value="${escapeHtml(p.id)}" />
             <select name="doctorId">
-              ${doctors.map((d) => `<option value="${escapeHtml(d.id)}">${escapeHtml(d.name)} (${escapeHtml(d.specialty)})</option>`).join("")}
+              ${doctors.map((d: Doctor) => `<option value="${escapeHtml(d.id)}">${escapeHtml(d.name)} (${escapeHtml(d.specialty)})</option>`).join("")}
             </select>
             <input type="submit" value="Book" />
           </form>

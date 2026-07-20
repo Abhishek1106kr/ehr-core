@@ -139,16 +139,16 @@ export async function syncFhirResources(organizationId: string) {
   ]);
 
   const results = await Promise.all([
-    ...patients.map((p) =>
+    ...patients.map((p: Patient) =>
       upsertFhirResource("Patient", `Patient/${p.id}`, toFhirPatient(p), p.id),
     ),
-    ...doctors.map((d) =>
+    ...doctors.map((d: Doctor) =>
       upsertFhirResource("Practitioner", `Practitioner/${d.id}`, toFhirPractitioner(d)),
     ),
-    ...appointments.map((a) =>
+    ...appointments.map((a: Appointment) =>
       upsertFhirResource("Appointment", `Appointment/${a.id}`, toFhirAppointment(a), a.patientId),
     ),
-    ...insurance.map((i) =>
+    ...insurance.map((i: Insurance) =>
       upsertFhirResource("Coverage", `Coverage/${i.id}`, toFhirCoverage(i), i.patientId),
     ),
   ]);
