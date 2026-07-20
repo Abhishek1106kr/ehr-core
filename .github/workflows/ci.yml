@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["main", "production", "feature/**"]
   pull_request:
-    branches: [main]
+    branches: ["main", "production"]
 
 jobs:
   build-and-test:
@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
