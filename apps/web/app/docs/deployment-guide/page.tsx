@@ -3,14 +3,7 @@ import { LandingNavbar } from "@/components/landing/navbar";
 import { LandingFooter } from "@/components/landing/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  Rocket,
-  CheckCircle2,
-  Server,
-  Key,
-  AlertTriangle,
-} from "lucide-react";
+import { ArrowLeft, Rocket, CheckCircle2, Server, Key, AlertTriangle } from "lucide-react";
 
 export default function DeploymentGuidePage() {
   return (
@@ -35,8 +28,8 @@ export default function DeploymentGuidePage() {
             Railway & Cloud Deployment Guide
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Complete deployment instructions for Railway, multi-stage Docker
-            builds, PostgreSQL, Redis, and environment variables.
+            Complete deployment instructions for Railway, multi-stage Docker builds, PostgreSQL,
+            Redis, and environment variables.
           </p>
 
           <div className="mt-8 space-y-6">
@@ -57,13 +50,9 @@ export default function DeploymentGuidePage() {
                   configuration file at the repository root.
                 </p>
                 <div className="font-mono bg-muted p-4 rounded-lg text-foreground space-y-2">
-                  <p className="text-muted-foreground">
-                    # Install Railway CLI and log in
-                  </p>
+                  <p className="text-muted-foreground"># Install Railway CLI and log in</p>
                   <p>npm i -g @railway/cli && railway login</p>
-                  <p className="text-muted-foreground pt-2">
-                    # Link repository and deploy
-                  </p>
+                  <p className="text-muted-foreground pt-2"># Link repository and deploy</p>
                   <p>railway link && railway up</p>
                 </div>
               </CardContent>
@@ -100,9 +89,7 @@ export default function DeploymentGuidePage() {
                       </span>
                     </div>
                     <div className="p-3 grid grid-cols-3">
-                      <span className="font-bold text-primary">
-                        DATABASE_URL
-                      </span>
+                      <span className="font-bold text-primary">DATABASE_URL</span>
                       <span>postgresql://...</span>
                       <span className="font-sans text-muted-foreground">
                         Railway Managed PostgreSQL connection string.
@@ -123,9 +110,7 @@ export default function DeploymentGuidePage() {
                       </span>
                     </div>
                     <div className="p-3 grid grid-cols-3">
-                      <span className="font-bold text-primary">
-                        COOKIE_SECURE
-                      </span>
+                      <span className="font-bold text-primary">COOKIE_SECURE</span>
                       <span>true</span>
                       <span className="font-sans text-muted-foreground">
                         Enforces TLS/HTTPS for session cookies.
@@ -157,20 +142,17 @@ export default function DeploymentGuidePage() {
                   <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground">
                     /health
                   </code>{" "}
-                  on port{" "}
-                  <code className="font-mono text-foreground">4000</code>.
+                  on port <code className="font-mono text-foreground">4000</code>.
                 </p>
                 <div className="bg-muted p-3 rounded-lg font-mono text-foreground">
-                  GET /health -&gt; 200 OK &#123; &quot;status&quot;:
-                  &quot;ok&quot;, &quot;service&quot;:
-                  &quot;openehr-bridge-api&quot; &#125;
+                  GET /health -&gt; 200 OK &#123; &quot;status&quot;: &quot;ok&quot;,
+                  &quot;service&quot;: &quot;openehr-bridge-api&quot; &#125;
                 </div>
                 <div className="flex items-start gap-2 text-amber-600 dark:text-amber-400 bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
                   <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>
-                    Note: Ensure{" "}
-                    <code className="font-mono">npx prisma db push</code> or
-                    migrations run before starting the Express container.
+                    Note: Ensure <code className="font-mono">npx prisma db push</code> or migrations
+                    run before starting the Express container.
                   </span>
                 </div>
               </CardContent>

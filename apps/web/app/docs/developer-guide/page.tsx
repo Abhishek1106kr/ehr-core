@@ -21,8 +21,8 @@ export default function DeveloperGuidePage() {
             Developer Setup & Architecture Guide
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Monorepo directory structure, local development environment,
-            database migrations, and job worker execution.
+            Monorepo directory structure, local development environment, database migrations, and
+            job worker execution.
           </p>
 
           <div className="mt-8 space-y-6">
@@ -64,34 +64,25 @@ export default function DeveloperGuidePage() {
               </CardHeader>
               <CardContent className="text-xs space-y-4">
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground">
-                    # 1. Install workspace dependencies
-                  </p>
-                  <p className="bg-muted p-2 rounded text-foreground">
-                    npm install
-                  </p>
+                  <p className="text-muted-foreground"># 1. Install workspace dependencies</p>
+                  <p className="bg-muted p-2 rounded text-foreground">npm install</p>
                 </div>
                 <div className="space-y-2 font-mono">
                   <p className="text-muted-foreground">
                     # 2. Launch Postgres & Redis docker containers
                   </p>
-                  <p className="bg-muted p-2 rounded text-foreground">
-                    docker compose up -d
-                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">docker compose up -d</p>
                 </div>
                 <div className="space-y-2 font-mono">
                   <p className="text-muted-foreground">
                     # 3. Synchronize database schema & seed demo users
                   </p>
                   <p className="bg-muted p-2 rounded text-foreground">
-                    npm run db:push --workspace=apps/api && npm run db:seed
-                    --workspace=apps/api
+                    npm run db:push --workspace=apps/api && npm run db:seed --workspace=apps/api
                   </p>
                 </div>
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground">
-                    # 4. Install Playwright browser binaries
-                  </p>
+                  <p className="text-muted-foreground"># 4. Install Playwright browser binaries</p>
                   <p className="bg-muted p-2 rounded text-foreground">
                     npx playwright install chromium
                   </p>
@@ -100,9 +91,7 @@ export default function DeveloperGuidePage() {
                   <p className="text-muted-foreground">
                     # 5. Start dev server and background worker
                   </p>
-                  <p className="bg-muted p-2 rounded text-foreground">
-                    npm run dev
-                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">npm run dev</p>
                 </div>
               </CardContent>
             </Card>
@@ -116,17 +105,11 @@ export default function DeveloperGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground leading-relaxed space-y-2">
                 <p>
-                  To add a new integration adapter (e.g., Epic SMART-on-FHIR or
-                  Cerner Ignite), implement a new service class conforming to
-                  the adapter pattern in{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    apps/api/src/services/
-                  </code>{" "}
-                  and register it in{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    workflowEngine.service.ts
-                  </code>
-                  .
+                  To add a new integration adapter (e.g., Epic SMART-on-FHIR or Cerner Ignite),
+                  implement a new service class conforming to the adapter pattern in{" "}
+                  <code className="rounded bg-muted px-1 py-0.5">apps/api/src/services/</code> and
+                  register it in{" "}
+                  <code className="rounded bg-muted px-1 py-0.5">workflowEngine.service.ts</code>.
                 </p>
               </CardContent>
             </Card>

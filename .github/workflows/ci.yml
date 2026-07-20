@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: openehr
+          POSTGRES_PASSWORD: openehr
+          POSTGRES_DB: openehr_bridge_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U openehr"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://openehr:openehr@localhost:5432/openehr_bridge_test
+      JWT_SECRET: ci-only-secret-not-for-production-use
+      WEB_ORIGIN: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:4000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared package
+        run: npm run build --workspace=packages/shared
+
+      - name: Generate Prisma client
+        run: npm run db:generate --workspace=apps/api
+
+      - name: Lint API
+        run: npm run lint --workspace=apps/api
+
+      - name: Lint web
+        run: npm run lint --workspace=apps/web
+
+      - name: Typecheck API
+        run: npm run typecheck --workspace=apps/api
+
+      - name: Typecheck web
+        run: npm run typecheck --workspace=apps/web
+
+      - name: Run API migrations
+        run: npm run db:deploy --workspace=apps/api
+
+      - name: API unit/integration tests
+        run: npm run test --workspace=apps/api
+
+      - name: Build API
+        run: npm run build --workspace=apps/api
+
+      - name: Build web
+        run: npm run build --workspace=apps/web

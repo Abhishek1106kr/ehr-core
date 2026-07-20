@@ -2,13 +2,7 @@ import Link from "next/link";
 import { LandingNavbar } from "@/components/landing/navbar";
 import { LandingFooter } from "@/components/landing/footer";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Layers,
@@ -42,8 +36,8 @@ export default function ArchitecturePage() {
                 System Architecture & Design Blueprint
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                High-Level Design (HLD), Low-Level Design (LLD), and sequence
-                flows for OpenEHR Bridge.
+                High-Level Design (HLD), Low-Level Design (LLD), and sequence flows for OpenEHR
+                Bridge.
               </p>
             </div>
 
@@ -62,12 +56,10 @@ export default function ArchitecturePage() {
                 <div className="flex items-center gap-2">
                   <Badge variant="outline">Architecture Overview</Badge>
                 </div>
-                <CardTitle className="text-xl">
-                  High Level Architecture (HLD)
-                </CardTitle>
+                <CardTitle className="text-xl">High Level Architecture (HLD)</CardTitle>
                 <CardDescription>
-                  Decoupled multi-tier architecture isolating HTTP client
-                  requests from background queue workers.
+                  Decoupled multi-tier architecture isolating HTTP client requests from background
+                  queue workers.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -101,9 +93,8 @@ export default function ArchitecturePage() {
                       FHIR R4 Adapter Strategy
                     </h3>
                     <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                      Converts domain entities (`Patient`, `Doctor`,
-                      `Appointment`, `Insurance`) into spec-compliant HL7 FHIR
-                      R4 JSON payloads (`Patient`, `Practitioner`,
+                      Converts domain entities (`Patient`, `Doctor`, `Appointment`, `Insurance`)
+                      into spec-compliant HL7 FHIR R4 JSON payloads (`Patient`, `Practitioner`,
                       `Appointment`, `Coverage`).
                     </p>
                   </div>
@@ -113,9 +104,9 @@ export default function ArchitecturePage() {
                       Playwright Browser Driver
                     </h3>
                     <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                      Drives headless Chromium to navigate legacy web EHR
-                      portals (`/legacy-portal`), logging step durations and
-                      saving PNG screenshot audit trails.
+                      Drives headless Chromium to navigate legacy web EHR portals
+                      (`/legacy-portal`), logging step durations and saving PNG screenshot audit
+                      trails.
                     </p>
                   </div>
                 </div>
@@ -125,22 +116,17 @@ export default function ArchitecturePage() {
             {/* Section 2: Sequence Flows */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">
-                  Workflow Execution Sequence
-                </CardTitle>
+                <CardTitle className="text-xl">Workflow Execution Sequence</CardTitle>
                 <CardDescription>
-                  Step-by-step event progression from client trigger to final
-                  audit logging.
+                  Step-by-step event progression from client trigger to final audit logging.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 text-xs">
                 <div className="space-y-2 border-l-2 border-primary/40 pl-4">
-                  <p className="font-semibold text-foreground">
-                    1. Workflow Initiation
-                  </p>
+                  <p className="font-semibold text-foreground">1. Workflow Initiation</p>
                   <p className="text-muted-foreground">
-                    Client posts request to `/api/v1/workflows/run` carrying
-                    workflow type and parameters.
+                    Client posts request to `/api/v1/workflows/run` carrying workflow type and
+                    parameters.
                   </p>
                 </div>
                 <div className="space-y-2 border-l-2 border-primary/40 pl-4">
@@ -148,26 +134,22 @@ export default function ArchitecturePage() {
                     2. Mode Resolution (`chooseIntegrationMode`)
                   </p>
                   <p className="text-muted-foreground">
-                    Engine evaluates organization config rows to select
-                    `FHIR_REST` or `BROWSER_AUTOMATION`.
+                    Engine evaluates organization config rows to select `FHIR_REST` or
+                    `BROWSER_AUTOMATION`.
                   </p>
                 </div>
                 <div className="space-y-2 border-l-2 border-primary/40 pl-4">
-                  <p className="font-semibold text-foreground">
-                    3. Queue Enqueue & Step Logging
-                  </p>
+                  <p className="font-semibold text-foreground">3. Queue Enqueue & Step Logging</p>
                   <p className="text-muted-foreground">
-                    Enqueues job into BullMQ Redis Queue and initializes
-                    `AutomationJob` + `WorkflowStep` rows.
+                    Enqueues job into BullMQ Redis Queue and initializes `AutomationJob` +
+                    `WorkflowStep` rows.
                   </p>
                 </div>
                 <div className="space-y-2 border-l-2 border-primary/40 pl-4">
-                  <p className="font-semibold text-foreground">
-                    4. Execution & Automatic Retry
-                  </p>
+                  <p className="font-semibold text-foreground">4. Execution & Automatic Retry</p>
                   <p className="text-muted-foreground">
-                    Worker executes Playwright DOM script. On transient failure,
-                    exponential backoff retries up to 3 times.
+                    Worker executes Playwright DOM script. On transient failure, exponential backoff
+                    retries up to 3 times.
                   </p>
                 </div>
                 <div className="space-y-2 border-l-2 border-primary/40 pl-4">
@@ -175,8 +157,8 @@ export default function ArchitecturePage() {
                     5. Screenshot Capture & Audit Verification
                   </p>
                   <p className="text-muted-foreground">
-                    Saves step screenshots to storage and writes append-only
-                    `AuditLog` entry with correlation context.
+                    Saves step screenshots to storage and writes append-only `AuditLog` entry with
+                    correlation context.
                   </p>
                 </div>
               </CardContent>

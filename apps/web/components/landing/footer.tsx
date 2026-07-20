@@ -13,13 +13,11 @@ export function LandingFooter() {
               <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Cross className="h-4 w-4" aria-hidden />
               </div>
-              <span className="text-base font-bold text-foreground">
-                OpenEHR Bridge
-              </span>
+              <span className="text-base font-bold text-foreground">OpenEHR Bridge</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              Universal healthcare integration platform bridging modern AI
-              agents, FHIR R4 standard servers, and legacy EHR portals.
+              Universal healthcare integration platform bridging modern AI agents, FHIR R4 standard
+              servers, and legacy EHR portals.
             </p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-emerald-500" />
@@ -32,26 +30,17 @@ export function LandingFooter() {
             <h3 className="text-sm font-semibold text-foreground">Platform</h3>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link
-                  href="/dashboard"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/dashboard" className="hover:text-foreground transition-colors">
                   Operations Dashboard
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/automation"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/automation" className="hover:text-foreground transition-colors">
                   Automation Engine
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/fhir"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/fhir" className="hover:text-foreground transition-colors">
                   FHIR R4 Explorer
                 </Link>
               </li>
@@ -68,23 +57,15 @@ export function LandingFooter() {
 
           {/* Architecture & Docs Col */}
           <div>
-            <h3 className="text-sm font-semibold text-foreground">
-              Documentation
-            </h3>
+            <h3 className="text-sm font-semibold text-foreground">Documentation</h3>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link
-                  href="/docs"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/docs" className="hover:text-foreground transition-colors">
                   Documentation Overview
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/architecture"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/architecture" className="hover:text-foreground transition-colors">
                   High Level Architecture
                 </Link>
               </li>
@@ -131,10 +112,7 @@ export function LandingFooter() {
                 </a>
               </li>
               <li>
-                <Link
-                  href="/screenshots"
-                  className="hover:text-foreground transition-colors"
-                >
+                <Link href="/screenshots" className="hover:text-foreground transition-colors">
                   Screenshots Gallery
                 </Link>
               </li>
@@ -154,12 +132,11 @@ export function LandingFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row">
           <p>
-            © {new Date().getFullYear()} OpenEHR Bridge. Designed for Confido
-            Health Technical Audit.
+            © {new Date().getFullYear()} OpenEHR Bridge. Designed for Confido Health Technical
+            Audit.
           </p>
           <p className="mt-2 flex items-center gap-1 sm:mt-0">
-            Engineered with{" "}
-            <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" /> for
+            Engineered with <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500" /> for
             Healthcare Interoperability.
           </p>
         </div>

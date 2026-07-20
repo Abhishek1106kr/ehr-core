@@ -102,8 +102,7 @@ export default function ApiReferencePage() {
                 REST API Reference
               </h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                Endpoints, authentication parameters, FHIR resources, and
-                operational probes.
+                Endpoints, authentication parameters, FHIR resources, and operational probes.
               </p>
             </div>
 
@@ -127,11 +126,8 @@ export default function ApiReferencePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2">
                 <p>
-                  All REST API endpoints require an active session authenticated
-                  via the{" "}
-                  <code className="rounded bg-muted px-1 py-0.5 font-mono">
-                    openehr_session
-                  </code>{" "}
+                  All REST API endpoints require an active session authenticated via the{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 font-mono">openehr_session</code>{" "}
                   HTTP-only cookie or a standard{" "}
                   <code className="rounded bg-muted px-1 py-0.5 font-mono">
                     Authorization: Bearer &lt;token&gt;
@@ -164,9 +160,7 @@ export default function ApiReferencePage() {
                       >
                         {ep.method}
                       </Badge>
-                      <span className="font-semibold text-foreground">
-                        {ep.path}
-                      </span>
+                      <span className="font-semibold text-foreground">{ep.path}</span>
                     </div>
                     <span className="text-muted-foreground">{ep.desc}</span>
                   </div>

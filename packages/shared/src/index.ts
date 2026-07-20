@@ -9,19 +9,10 @@ export type Gender = "MALE" | "FEMALE" | "OTHER" | "UNSPECIFIED";
 export type VerificationStatus = "UNVERIFIED" | "PENDING" | "VERIFIED" | "FAILED";
 
 export type InsuranceVerificationStatus =
-  | "NOT_CHECKED"
-  | "PENDING"
-  | "ACTIVE"
-  | "INACTIVE"
-  | "DENIED";
+  "NOT_CHECKED" | "PENDING" | "ACTIVE" | "INACTIVE" | "DENIED";
 
 export type AppointmentStatus =
-  | "REQUESTED"
-  | "CONFIRMED"
-  | "RESCHEDULED"
-  | "CANCELLED"
-  | "COMPLETED"
-  | "NO_SHOW";
+  "REQUESTED" | "CONFIRMED" | "RESCHEDULED" | "CANCELLED" | "COMPLETED" | "NO_SHOW";
 
 export type IntegrationMode = "FHIR_REST" | "BROWSER_AUTOMATION";
 
@@ -34,13 +25,7 @@ export type WorkflowType =
   | "INSURANCE_VERIFICATION"
   | "PATIENT_LOOKUP";
 
-export type JobStatus =
-  | "PENDING"
-  | "RUNNING"
-  | "SUCCESS"
-  | "FAILED"
-  | "RETRYING"
-  | "DEAD_LETTER";
+export type JobStatus = "PENDING" | "RUNNING" | "SUCCESS" | "FAILED" | "RETRYING" | "DEAD_LETTER";
 
 export interface Patient {
   id: string;
@@ -177,6 +162,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "appointments:read",
     "appointments:write",
     "insurance:read",
+    "monitoring:read",
   ],
   RECEPTIONIST: [
     "patients:read",
@@ -185,8 +171,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "appointments:write",
     "insurance:read",
     "insurance:write",
+    "monitoring:read",
   ],
-  NURSE: ["patients:read", "appointments:read", "insurance:read"],
+  NURSE: ["patients:read", "appointments:read", "insurance:read", "monitoring:read"],
   AUDITOR: ["audit:read", "monitoring:read"],
 };
 

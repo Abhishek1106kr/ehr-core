@@ -2,16 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Cross,
-  Menu,
-  X,
-  ArrowRight,
-  BookOpen,
-  Layers,
-  Monitor,
-  Rocket,
-} from "lucide-react";
+import { Cross, Menu, X, ArrowRight, BookOpen, Layers, Monitor, Rocket } from "lucide-react";
 import { GithubIcon } from "@/components/landing/github-icon";
 import { Button } from "@/components/ui/button";
 
@@ -41,16 +32,10 @@ export function LandingNavbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-6 md:flex text-sm font-medium text-muted-foreground">
-          <Link
-            href="/#features"
-            className="transition-colors hover:text-foreground"
-          >
+          <Link href="/#features" className="transition-colors hover:text-foreground">
             Features
           </Link>
-          <Link
-            href="/#workflow"
-            className="transition-colors hover:text-foreground"
-          >
+          <Link href="/#workflow" className="transition-colors hover:text-foreground">
             Workflow
           </Link>
           <Link
@@ -111,11 +96,7 @@ export function LandingNavbar() {
           className="flex h-9 w-9 items-center justify-center rounded-md border border-border p-1.5 text-muted-foreground md:hidden"
           aria-label="Toggle Navigation Menu"
         >
-          {mobileMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
@@ -167,18 +148,11 @@ export function LandingNavbar() {
             </Link>
             <div className="mt-2 flex flex-col gap-2 pt-2 border-t border-border">
               <Button asChild className="w-full justify-center">
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
+                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
                   Launch App
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                asChild
-                className="w-full justify-center gap-2"
-              >
+              <Button variant="outline" asChild className="w-full justify-center gap-2">
                 <a
                   href="https://github.com/Abhishek1106kr/ehr-core"
                   target="_blank"

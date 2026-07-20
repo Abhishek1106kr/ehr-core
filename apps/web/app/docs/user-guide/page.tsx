@@ -31,9 +31,8 @@ export default function UserGuidePage() {
             User Operations Guide
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Complete guide for healthcare operations staff managing
-            registration, scheduling, FHIR synchronization, and workflow
-            monitoring.
+            Complete guide for healthcare operations staff managing registration, scheduling, FHIR
+            synchronization, and workflow monitoring.
           </p>
 
           <div className="mt-8 space-y-6">
@@ -46,21 +45,14 @@ export default function UserGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
-                  Navigate to{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    /patients
-                  </code>{" "}
-                  to register new patients. Enter demographic information
-                  including MRN, legal name, date of birth, preferred language,
-                  and Aadhaar/National ID.
+                  Navigate to <code className="rounded bg-muted px-1 py-0.5">/patients</code> to
+                  register new patients. Enter demographic information including MRN, legal name,
+                  date of birth, preferred language, and Aadhaar/National ID.
                 </p>
                 <p>
                   The system automatically calculates a{" "}
-                  <span className="font-semibold text-foreground">
-                    Verification Score
-                  </span>{" "}
-                  and assigns a status badge (
-                  <code className="text-emerald-500">VERIFIED</code>,{" "}
+                  <span className="font-semibold text-foreground">Verification Score</span> and
+                  assigns a status badge (<code className="text-emerald-500">VERIFIED</code>,{" "}
                   <code className="text-amber-500">PENDING</code>, or{" "}
                   <code className="text-rose-500">FAILED</code>).
                 </p>
@@ -76,27 +68,19 @@ export default function UserGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
-                  Navigate to{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    /appointments
-                  </code>{" "}
-                  to view provider schedules. Every booking evaluates the
-                  organization&apos;s integration mode:
+                  Navigate to <code className="rounded bg-muted px-1 py-0.5">/appointments</code> to
+                  view provider schedules. Every booking evaluates the organization&apos;s
+                  integration mode:
                 </p>
                 <ul className="list-disc pl-4 space-y-1">
                   <li>
-                    <span className="font-semibold text-foreground">
-                      FHIR REST Mode
-                    </span>
-                    : Direct REST API update producing a spec-compliant FHIR R4
-                    Appointment resource.
+                    <span className="font-semibold text-foreground">FHIR REST Mode</span>: Direct
+                    REST API update producing a spec-compliant FHIR R4 Appointment resource.
                   </li>
                   <li>
-                    <span className="font-semibold text-foreground">
-                      Browser Automation Mode
-                    </span>
-                    : Enqueues a Playwright Chromium job that navigates the
-                    legacy hospital portal DOM.
+                    <span className="font-semibold text-foreground">Browser Automation Mode</span>:
+                    Enqueues a Playwright Chromium job that navigates the legacy hospital portal
+                    DOM.
                   </li>
                 </ul>
               </CardContent>
@@ -111,16 +95,13 @@ export default function UserGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
-                  On{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    /insurance
-                  </code>
-                  , view active patient insurance policies. Click{" "}
+                  On <code className="rounded bg-muted px-1 py-0.5">/insurance</code>, view active
+                  patient insurance policies. Click{" "}
                   <span className="font-semibold text-foreground">
                     &quot;Verify Eligibility&quot;
                   </span>{" "}
-                  to run an EDI 270/271 status query returning policy active
-                  state, deductible balance, and co-pay requirements.
+                  to run an EDI 270/271 status query returning policy active state, deductible
+                  balance, and co-pay requirements.
                 </p>
               </CardContent>
             </Card>
@@ -134,10 +115,8 @@ export default function UserGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
-                  Visit{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">/fhir</code> to
-                  inspect standard FHIR R4 JSON payloads for{" "}
-                  <code className="font-mono">Patient</code>,{" "}
+                  Visit <code className="rounded bg-muted px-1 py-0.5">/fhir</code> to inspect
+                  standard FHIR R4 JSON payloads for <code className="font-mono">Patient</code>,{" "}
                   <code className="font-mono">Practitioner</code>,{" "}
                   <code className="font-mono">Appointment</code>, and{" "}
                   <code className="font-mono">Coverage</code>. Use the{" "}
@@ -158,13 +137,9 @@ export default function UserGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
-                  Navigate to{" "}
-                  <code className="rounded bg-muted px-1 py-0.5">
-                    /audit-logs
-                  </code>{" "}
-                  to view the append-only HIPAA/ABDM audit record. Expand any
-                  row to inspect pre and post state change JSON snapshots along
-                  with W3C trace IDs.
+                  Navigate to <code className="rounded bg-muted px-1 py-0.5">/audit-logs</code> to
+                  view the append-only HIPAA/ABDM audit record. Expand any row to inspect pre and
+                  post state change JSON snapshots along with W3C trace IDs.
                 </p>
               </CardContent>
             </Card>
