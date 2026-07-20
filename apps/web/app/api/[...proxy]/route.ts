@@ -38,8 +38,8 @@ async function proxyRequest(
   method: string,
 ) {
   try {
-    const { proxy } = await params;
-    const path = "/" + proxy.join("/");
+    const reqUrl = new URL(request.url);
+    const path = reqUrl.pathname;
     const url = new URL(path, BACKEND_URL);
 
     // Forward query params
