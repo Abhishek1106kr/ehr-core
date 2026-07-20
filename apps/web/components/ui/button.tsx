@@ -62,7 +62,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <button ref={ref} className={combinedClassName} {...props}>
+      <button ref={ref} className={combinedClassName} suppressHydrationWarning {...props}>
         {children}
       </button>
     );

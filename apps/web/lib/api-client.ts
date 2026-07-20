@@ -39,12 +39,21 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     }
   }
 
-  const res = await fetch(url.toString(), {
-    method: options.method ?? "GET",
-    credentials: "include",
-    headers: options.body ? { "Content-Type": "application/json" } : undefined,
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      method: options.method ?? "GET",
+      credentials: "include",
+      headers: options.body ? { "Content-Type": "application/json" } : undefined,
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+  } catch (err) {
+    throw new ApiRequestError(
+      503,
+      "SERVICE_UNAVAILABLE",
+      `Unable to connect to API server at ${API_URL}. Please ensure the backend dev server is running (npm run dev).`,
+    );
+  }
 
   if (res.status === 204) return undefined as T;
 

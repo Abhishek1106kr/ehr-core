@@ -12,7 +12,7 @@ import { ApiRequestError } from "@/lib/api-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("admin@confidohealth.demo");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("Password123!");
   const [error, setError] = useState<string | null>(null);
   const login = useLogin();
   const router = useRouter();
