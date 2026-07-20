@@ -4,9 +4,9 @@ import { logger } from "./lib/logger";
 
 const app = createApp();
 
-const server = app.listen(env.PORT, () => {
-  logger.info(`OpenEHR Bridge API listening on http://localhost:${env.PORT}`);
-  logger.info(`Swagger docs available at http://localhost:${env.PORT}/api/docs`);
+const server = app.listen(env.PORT, "0.0.0.0", () => {
+  logger.info(`OpenEHR Bridge API listening on 0.0.0.0:${env.PORT}`);
+  logger.info(`Swagger docs available at http://0.0.0.0:${env.PORT}/api/docs`);
 });
 
 function shutdown(signal: string) {

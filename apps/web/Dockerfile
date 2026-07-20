@@ -22,4 +22,4 @@ COPY --from=build /repo/node_modules ./node_modules
 COPY --from=build /repo/apps/web/package.json ./apps/web/package.json
 WORKDIR /repo/apps/web
 EXPOSE 3000
-CMD ["npx", "next", "start"]
+CMD ["npm", "run", "start"]
