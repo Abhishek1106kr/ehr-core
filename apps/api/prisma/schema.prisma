@@ -169,6 +169,7 @@ model Patient {
   insurancePolicies Insurance[]
   conversations     Conversation[]
   fhirResources     FhirResource[]
+  consentRecords    ConsentRecord[]
 
   @@index([organizationId])
   @@index([name])
@@ -396,3 +397,34 @@ model AuditLog {
   @@index([timestamp])
   @@index([action])
 }
+
+// ---------------------------------------------------------------------------
+// Patient Consent Management (HIPAA / ABDM Data Sharing Authorization)
+// ---------------------------------------------------------------------------
+
+enum ConsentStatus {
+  GRANTED
+  REVOKED
+  EXPIRED
+  PENDING
+}
+
+model ConsentRecord {
+  id             String        @id @default(uuid())
+  patient        Patient       @relation(fields: [patientId], references: [id])
+  patientId      String
+  purpose        String        // e.g. "CARE_COORDINATION", "INSURANCE_VERIFICATION", "FHIR_SYNC"
+  scopes         String[]      // e.g. ["demographics:read", "appointments:write"]
+  status         ConsentStatus @default(GRANTED)
+  grantedAt      DateTime      @default(now())
+  expiresAt      DateTime?
+  revokedAt      DateTime?
+  signatureHash  String        // Digital signature / consent authorization checksum
+  createdIp      String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([patientId])
+  @@index([status])
+}
+
