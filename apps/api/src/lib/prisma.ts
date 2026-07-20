@@ -1,0 +1,18 @@
+import { PrismaClient } from "@prisma/client";
+import { env } from "../config/env";
+
+// Reuse a single client across hot-reloads in dev (tsx watch) to avoid
+// exhausting the Postgres connection pool.
+declare global {
+  var __prisma: PrismaClient | undefined;
+}
+
+export const prisma =
+  global.__prisma ??
+  new PrismaClient({
+    log: env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
+  });
+
+if (env.NODE_ENV !== "production") {
+  global.__prisma = prisma;
+}
