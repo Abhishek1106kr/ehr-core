@@ -22,6 +22,8 @@ import { dashboardRouter } from "./routes/dashboard.routes";
 import { fhirRouter } from "./routes/fhir.routes";
 import { workflowRouter } from "./routes/workflow.routes";
 import { legacyPortalRouter } from "./legacyPortal/legacyPortal.routes";
+import { consentRouter } from "./routes/consent.routes";
+import { collectSystemMetrics } from "./services/metrics.service";
 import path from "node:path";
 
 export function createApp() {
@@ -51,6 +53,11 @@ export function createApp() {
     res.json({ status: "ok", service: "openehr-bridge-api", timestamp: new Date().toISOString() });
   });
 
+  app.get("/api/v1/metrics", async (_req, res) => {
+    const metrics = await collectSystemMetrics();
+    res.json(metrics);
+  });
+
   app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.use("/api/v1/auth", authRouter);
@@ -64,6 +71,7 @@ export function createApp() {
   app.use("/api/v1/dashboard", dashboardRouter);
   app.use("/api/v1/fhir", fhirRouter);
   app.use("/api/v1/workflows", workflowRouter);
+  app.use("/api/v1/consent", consentRouter);
 
   // Simulated legacy hospital portal — driven by Playwright, not our auth.
   app.use("/legacy-portal", legacyPortalRouter);

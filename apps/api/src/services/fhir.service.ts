@@ -92,6 +92,21 @@ function mapAppointmentStatus(status: string): string {
   }
 }
 
+/** Validates essential FHIR R4 attribute structures before database storage. */
+export function validateFhirResourcePayload(resourceType: string, data: any): void {
+  if (!data || typeof data !== "object") {
+    throw new ValidationError(`Invalid FHIR ${resourceType} payload: expected an object`);
+  }
+  if (data.resourceType !== resourceType) {
+    throw new ValidationError(
+      `FHIR resourceType mismatch: expected "${resourceType}", got "${data.resourceType}"`,
+    );
+  }
+  if (!data.id) {
+    throw new ValidationError(`FHIR ${resourceType} payload missing required field "id"`);
+  }
+}
+
 /** Upserts (or version-bumps) the FhirResource row backing one domain record. */
 async function upsertFhirResource(
   resourceType: FhirResourceType,
@@ -99,6 +114,7 @@ async function upsertFhirResource(
   data: unknown,
   patientId?: string,
 ) {
+  validateFhirResourcePayload(resourceType, data);
   const existing = await prisma.fhirResource.findUnique({ where: { fhirId } });
   return prisma.fhirResource.upsert({
     where: { fhirId },
