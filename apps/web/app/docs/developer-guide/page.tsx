@@ -11,14 +11,18 @@ export default function DeveloperGuidePage() {
 
       <main className="flex-1 py-12">
         <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <Link href="/docs" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+          <Link
+            href="/docs"
+            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
+          >
             <ArrowLeft className="h-3 w-3" /> Back to Docs
           </Link>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
             Developer Setup & Architecture Guide
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Monorepo directory structure, local development environment, database migrations, and job worker execution.
+            Monorepo directory structure, local development environment,
+            database migrations, and job worker execution.
           </p>
 
           <div className="mt-8 space-y-6">
@@ -60,24 +64,45 @@ export default function DeveloperGuidePage() {
               </CardHeader>
               <CardContent className="text-xs space-y-4">
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground"># 1. Install workspace dependencies</p>
-                  <p className="bg-muted p-2 rounded text-foreground">npm install</p>
+                  <p className="text-muted-foreground">
+                    # 1. Install workspace dependencies
+                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">
+                    npm install
+                  </p>
                 </div>
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground"># 2. Launch Postgres & Redis docker containers</p>
-                  <p className="bg-muted p-2 rounded text-foreground">docker compose up -d</p>
+                  <p className="text-muted-foreground">
+                    # 2. Launch Postgres & Redis docker containers
+                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">
+                    docker compose up -d
+                  </p>
                 </div>
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground"># 3. Synchronize database schema & seed demo users</p>
-                  <p className="bg-muted p-2 rounded text-foreground">npm run db:push --workspace=apps/api && npm run db:seed --workspace=apps/api</p>
+                  <p className="text-muted-foreground">
+                    # 3. Synchronize database schema & seed demo users
+                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">
+                    npm run db:push --workspace=apps/api && npm run db:seed
+                    --workspace=apps/api
+                  </p>
                 </div>
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground"># 4. Install Playwright browser binaries</p>
-                  <p className="bg-muted p-2 rounded text-foreground">npx playwright install chromium</p>
+                  <p className="text-muted-foreground">
+                    # 4. Install Playwright browser binaries
+                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">
+                    npx playwright install chromium
+                  </p>
                 </div>
                 <div className="space-y-2 font-mono">
-                  <p className="text-muted-foreground"># 5. Start dev server and background worker</p>
-                  <p className="bg-muted p-2 rounded text-foreground">npm run dev</p>
+                  <p className="text-muted-foreground">
+                    # 5. Start dev server and background worker
+                  </p>
+                  <p className="bg-muted p-2 rounded text-foreground">
+                    npm run dev
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -91,7 +116,17 @@ export default function DeveloperGuidePage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground leading-relaxed space-y-2">
                 <p>
-                  To add a new integration adapter (e.g., Epic SMART-on-FHIR or Cerner Ignite), implement a new service class conforming to the adapter pattern in <code className="rounded bg-muted px-1 py-0.5">apps/api/src/services/</code> and register it in <code className="rounded bg-muted px-1 py-0.5">workflowEngine.service.ts</code>.
+                  To add a new integration adapter (e.g., Epic SMART-on-FHIR or
+                  Cerner Ignite), implement a new service class conforming to
+                  the adapter pattern in{" "}
+                  <code className="rounded bg-muted px-1 py-0.5">
+                    apps/api/src/services/
+                  </code>{" "}
+                  and register it in{" "}
+                  <code className="rounded bg-muted px-1 py-0.5">
+                    workflowEngine.service.ts
+                  </code>
+                  .
                 </p>
               </CardContent>
             </Card>
