@@ -16,13 +16,18 @@
     "db:migrate": "npm --prefix apps/api run db:migrate",
     "db:seed": "npm --prefix apps/api run db:seed",
     "db:studio": "npm --prefix apps/api run db:studio",
-    "prepare": "husky"
+    "prepare": "is-ci || husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "concurrently": "^10.0.3",
     "husky": "^9.1.7",
+    "is-ci": "^4.1.0",
     "prettier": "^3.3.3"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
   }
 }
