@@ -127,7 +127,7 @@ export function RunWorkflowDialog({
               <Label>Integration path</Label>
               <Select
                 value={integrationMode}
-                onValueChange={(v) => setIntegrationMode(v as IntegrationMode)}
+                onValueChange={(v: string) => setIntegrationMode(v as IntegrationMode)}
               >
                 <SelectTrigger>
                   <SelectValue />
