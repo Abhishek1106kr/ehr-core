@@ -49,6 +49,14 @@ export function createApp() {
     }),
   );
 
+  app.get("/", (_req, res) => {
+    res.json({
+      message: "Welcome to OpenEHR Bridge API",
+      docs: "/api/docs",
+      health: "/health",
+    });
+  });
+
   app.get("/health", (_req, res) => {
     res.json({ status: "ok", service: "openehr-bridge-api", timestamp: new Date().toISOString() });
   });
