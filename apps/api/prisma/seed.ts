@@ -152,6 +152,32 @@ async function main() {
     },
   });
 
+  await prisma.integration.upsert({
+    where: { id: "00000000-0000-0000-0000-0000000000f1" },
+    update: {},
+    create: {
+      id: "00000000-0000-0000-0000-0000000000f1",
+      organizationId: org.id,
+      name: "FHIR REST Server (mock)",
+      mode: "FHIR_REST",
+      config: { baseUrl: "https://fhir.confidohealth.demo/r4" },
+      isEnabled: true,
+    },
+  });
+
+  await prisma.integration.upsert({
+    where: { id: "00000000-0000-0000-0000-0000000000f2" },
+    update: {},
+    create: {
+      id: "00000000-0000-0000-0000-0000000000f2",
+      organizationId: org.id,
+      name: "MediTrack Legacy PMS (browser automation)",
+      mode: "BROWSER_AUTOMATION",
+      config: { portalUrl: "/legacy-portal" },
+      isEnabled: true,
+    },
+  });
+
   console.log("Seed complete:", { org: org.name, admin: admin.email, patient: patient.mrn });
 }
 

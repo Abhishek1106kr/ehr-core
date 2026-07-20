@@ -6,7 +6,10 @@
 // - Soft-delete via `deletedAt` on patient-facing records to preserve audit/history integrity.
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  // Windows ARM64 hosts can't load the x64 query-engine as an in-process
+  // library; run it as a spawned subprocess (which Windows emulates) instead.
+  engineType = "binary"
 }
 
 datasource db {
