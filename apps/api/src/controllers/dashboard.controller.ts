@@ -28,8 +28,12 @@ export const getDashboardSummaryHandler = asyncHandler(async (req: Request, res:
       prisma.doctor.findMany({ where: doctorWhere, select: { id: true } }),
     ]);
 
-  const totalJobs = jobCounts.reduce((sum, g) => sum + g._count, 0);
-  const successJobs = jobCounts.find((g) => g.status === "SUCCESS")?._count ?? 0;
+  const totalJobs = jobCounts.reduce(
+    (sum: number, g: { status: string; _count: number }) => sum + g._count,
+    0,
+  );
+  const successJobs =
+    jobCounts.find((g: { status: string; _count: number }) => g.status === "SUCCESS")?._count ?? 0;
   const automationSuccessRate = totalJobs > 0 ? Math.round((successJobs / totalJobs) * 100) : 100;
 
   const avgDuration = await prisma.automationJob.aggregate({
@@ -44,7 +48,10 @@ export const getDashboardSummaryHandler = asyncHandler(async (req: Request, res:
     failedWorkflows: failedJobs,
     averageResponseTimeMs: Math.round(avgDuration._avg.durationMs ?? 0),
     activeDoctors: doctorIds.length,
-    jobStatusBreakdown: jobCounts.map((g) => ({ status: g.status, count: g._count })),
+    jobStatusBreakdown: jobCounts.map((g: { status: string; _count: number }) => ({
+      status: g.status,
+      count: g._count,
+    })),
     recentActivity: recentAuditLogs,
   });
 });

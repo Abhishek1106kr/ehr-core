@@ -93,7 +93,7 @@ export function startWorker() {
           where: { id: job.data.automationJobId },
           data: { status: "DEAD_LETTER", finishedAt: new Date() },
         })
-        .catch((updateErr) =>
+        .catch((updateErr: unknown) =>
           logger.error({ updateErr }, "Failed to mark automation job as dead-lettered"),
         );
     }
