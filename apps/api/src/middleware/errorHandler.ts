@@ -20,6 +20,13 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     });
   }
 
+  // Catch malformed JSON from express.json()
+  if (err instanceof SyntaxError && "status" in err && err.status === 400) {
+    return res.status(400).json({
+      error: { code: "BAD_REQUEST", message: "Malformed JSON payload" },
+    });
+  }
+
   if (err instanceof ZodError) {
     return res.status(400).json({
       error: {
