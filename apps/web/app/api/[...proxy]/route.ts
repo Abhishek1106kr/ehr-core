@@ -69,11 +69,18 @@ async function proxyRequest(
     // Make the request to the backend
     const response = await fetch(url.toString(), options);
 
+    // Next.js fetch automatically decompresses the response body,
+    // so we must remove the content-encoding and content-length headers
+    // otherwise the browser will fail to decode the response.
+    const resHeaders = new Headers(response.headers);
+    resHeaders.delete("content-encoding");
+    resHeaders.delete("content-length");
+
     // Forward the response
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
-      headers: response.headers,
+      headers: resHeaders,
     });
   } catch (error) {
     console.error("Proxy error:", error);
